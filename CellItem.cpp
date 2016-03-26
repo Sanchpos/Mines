@@ -18,12 +18,6 @@ CellItem::CellItem(Cell *cell, QGraphicsItem *parent) :
     f.setPixelSize(cellSize - 4);
     m_text->setFont(f);
 
-
-    //setPos(m_cell->x() * cellSize, m_cell->y() * cellSize);
-
-    //setAcceptedMouseButtons(Qt::LeftButton);
-
-    //setAcceptedMouseButtons(Qt::RightButton);
 }
 
 QRectF CellItem::boundingRect() const

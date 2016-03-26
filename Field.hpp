@@ -12,12 +12,17 @@ class Cell;
 class Field : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int width READ width NOTIFY widthChanged)
+    Q_PROPERTY(int height READ height NOTIFY heightChanged)
+    Q_PROPERTY(State state READ state NOTIFY stateChanged)
+
 public:
     enum State{
         StateIdle,
         StateStarted,
         StateEnded
     };
+    Q_ENUM(State)
 
     Field();
 
@@ -36,7 +41,8 @@ public:
     int width() const { return m_width; }
     int height() const { return m_height; }
 
-    Cell *cellAt(int x, int y) const;
+    //Cell *cellAt(int x, int y) const;
+    Q_INVOKABLE Cell *cellAt(int x, int y) const;
 
     int numberOfMines() const { return m_numberOfMines; }
 
@@ -56,6 +62,10 @@ signals:
     void numberOfFlagsChanged(int numberOfFlags);
 
     void stateChanged(State newState);
+
+    void widthChanged(int newWidth);
+    void heightChanged(int newHeight);
+
 private:
     QVector<Cell*> m_cells;
 

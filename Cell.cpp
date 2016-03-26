@@ -65,7 +65,7 @@ void Cell::tryToOpenAround()
 
     if (mark == minesAround()){
         for (Cell *cell : getNeighbors()) {
-            if (cell->isMarked() == false){
+            if (cell->isMarked() == false && cell->mark() != MarkQuestioned){
                 cell->open();
             }
         }

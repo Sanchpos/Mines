@@ -110,7 +110,8 @@ void MainWindow::onFieldStateChanged()
         m_gameStateRect->setRect(0, (m_fieldItem->boundingRect().height() - rectHeight) / 2, m_field->width() * CellItem::cellSize + fieldBorderWidth * 2, rectHeight);
         m_gameStateText->setVisible(true);
         m_gameStateRect->setVisible(true);
-    } else {
+    }
+    else {
         m_gameStateText->setVisible(false);
         m_gameStateRect->setVisible(false);
     }

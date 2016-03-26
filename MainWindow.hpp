@@ -24,6 +24,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    Field *field() const { return m_field; }
+
 protected:
     void resizeEvent(QResizeEvent *event);
 
@@ -46,6 +48,7 @@ private slots:
     void on_actionIntermediate_triggered();
 
     void on_actionExpert_triggered();
+
 
 private:
     Ui::MainWindow *ui;

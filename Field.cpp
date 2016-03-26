@@ -18,7 +18,9 @@ void Field::setSize(int width, int height)
         m_cells.clear();
 
     m_width = width;
+    emit widthChanged(width);
     m_height = height;
+    emit heightChanged(height);
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -62,7 +64,7 @@ void Field::lose()
 {
     for (int y = 0; y <  m_height; ++y) {
         for (int x = 0; x < m_width; ++x) {
-            cellAt(x, y)->open();
+            cellAt(x, y)->reveal();
         }
     }
     setState(StateEnded);
@@ -117,6 +119,9 @@ void Field::onCellOpened(int x, int y)
     if(!isGenerated()){
         generate(x, y);
     }
+    if (m_numberOfOpenedCells == m_cells.count() - m_numberOfMines){
+        win();
+    }
     if (cellAt(x, y)->haveMine()){
         lose();
     }
@@ -137,11 +142,11 @@ void Field::onCellMarkChanged()
 
 void Field::win()
 {
-    qDebug() << "win!";
-    setState(StateEnded);
     for (int i = 0; i <  m_cells.size(); ++i) {
             m_cells[i]->reveal();
     }
+    qDebug() << "win!"; 
+    setState(StateEnded);
 }
 
 void Field::setState(State newState)
