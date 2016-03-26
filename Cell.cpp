@@ -2,15 +2,20 @@
 
 #include "Field.hpp"
 
-Cell::Cell(Field *field, int x, int y)
+Cell::Cell(int x, int y):
+    QObject()
 {
-    m_field = field;
+    //m_field = field;
 
     m_x = x;
     m_y = y;
 
     m_haveMine = false;
     m_open = false;
+
+    m_marked = false;
+
+    m_exploded = false;
 }
 
 int Cell::minesAround() const
@@ -21,7 +26,6 @@ int Cell::minesAround() const
             ++mines;
         }
     }
-
     return mines;
 }
 
@@ -30,37 +34,89 @@ void Cell::setHaveMine(bool haveMine)
     m_haveMine = haveMine;
 }
 
-void Cell::open()
+void Cell::toggleMark()
 {
-    if (m_open) {
-        return;
+    switch (m_mark) {
+    case MarkNothing:
+        m_mark = MarkFlagged;
+        m_marked = true;
+        emit markChanged(m_mark);
+        break;
+    case MarkFlagged:
+        m_mark = MarkQuestioned;
+        m_marked = false;
+        emit markChanged(m_mark);
+        break;
+    case MarkQuestioned:
+        m_mark = MarkNothing;
+        //emit markChanged(m_mark);
+        break;
+    }
+}
+
+void Cell::tryToOpenAround()
+{
+    int mark = 0;
+    for (Cell *cell : getNeighbors()) {
+        if (cell->isMarked()) {
+            ++mark;
+        }
     }
 
-    m_open = true;
-
-    if (minesAround() == 0) {
+    if (mark == minesAround()){
         for (Cell *cell : getNeighbors()) {
-            cell->open();
+            if (cell->isMarked() == false){
+                cell->open();
+            }
         }
     }
 }
 
-void maybeAddCell(QVector<Cell*> *vector, Cell *cell)
+void Cell::open()
 {
-    if (cell) {
-        vector->append(cell);
+    if (m_open == true){
+            return;
     }
+
+    m_open = true;
+    //if(m_field->isGenerated() == false){
+        //m_field->generate(m_x, m_y);
+    //}
+    emit opened(x(), y());
+    if (minesAround() == 0 && m_haveMine == false){
+        for (Cell *cell : getNeighbors()) {
+                cell->open();
+        }
+    }
+    if (haveMine() == true){
+        m_exploded = true;
+    }
+}
+
+
+void Cell::reset()
+{
+    m_haveMine = false;
+    m_open = false;
+
+    m_marked = false;
+
+    m_mark = MarkNothing;
+
+    m_exploded = false;
+}
+
+void Cell::setNeighbors(const QVector<Cell*> &neighbors)
+{
+    m_neighbors = neighbors;
 }
 
 QVector<Cell *> Cell::getNeighbors() const
 {
-    QVector<Cell*> neighbors;
-    for (int x = m_x - 1; x <= m_x + 1; ++x) {
-        maybeAddCell(&neighbors, m_field->cellAt(x, m_y - 1));
-        maybeAddCell(&neighbors, m_field->cellAt(x, m_y + 1));
-    }
-    maybeAddCell(&neighbors, m_field->cellAt(m_x - 1, m_y));
-    maybeAddCell(&neighbors, m_field->cellAt(m_x + 1, m_y));
+    return m_neighbors;
+}
 
-    return neighbors;
+void Cell::reveal()
+{
+    m_open = true;
 }

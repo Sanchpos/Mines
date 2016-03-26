@@ -9,12 +9,14 @@ class QGraphicsSimpleTextItem;
 class CellItem : public QGraphicsItem
 {
 public:
-    CellItem(Cell *cell);
+    CellItem(Cell *cell, QGraphicsItem *parent = 0);
 
     // QGraphicsItem interface
 public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    static const int cellSize;
 
     // QGraphicsItem interface
 protected:
