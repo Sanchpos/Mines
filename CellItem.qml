@@ -10,14 +10,61 @@ Rectangle {
     property Cell cell: null
 
     Rectangle {
-        color: "#c0c0c0"
-        visible:  !cell.isOpen
         anchors.fill: parent
         anchors.margins: 2
+        //visible: cell.isOpen & cell.haveMine
+        color: { if (cell.isOpen) {
+                    if (cell.haveMine) {
+                        if (cell.isExploded() === false ){
+                            "red"
+                        }
+                        else {
+                            "green"
+                        }
+                    }
+                }
+            }
+
+        Rectangle {
+            id: cellrect
+            color: "#c0c0c0"
+            visible:  !cell.isOpen
+            anchors.fill: parent
+            anchors.margins: 2
+            Text {
+                text: text()
+                anchors.centerIn: cellrect
+                font.pixelSize: 50
+                function text(){
+                    switch (cell.mark){
+                    case 0:
+                        return ""
+                    case 1:
+                        return "!"
+                    case 2:
+                        return "?"
+                    }
+                }
+            }
+        }
     }
+
 
     MouseArea {
         anchors.fill: parent
-        onClicked:  cell.open()
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: {
+            if (mouse.button & Qt.RightButton) {
+               cell.toggleMark()
+            }
+            else {
+                if (cell.isOpen){
+                    cell.tryToOpenAround();
+                }
+                else {
+                    cell.open();
+                }
+            }
+        }
     }
 }

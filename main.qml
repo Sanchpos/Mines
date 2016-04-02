@@ -14,13 +14,13 @@ Rectangle {
                 cell: field.cellAt(index % field.width, index / field.width)
             }
         }
-        Rectangle {
-            color: "#c0c0c0"
-            opacity: 0.7
-        }
-        Text {
-            text: "Game over"
-        }
+//        Rectangle {
+//            color: "#c0c0c0"
+//            opacity: 0.7
+//        }
+//        Text {
+//            text: "Game over"
+//        }
     }
 }
 
