@@ -12,16 +12,19 @@ Field::Field():
 
 void Field::setSize(int width, int height)
 {
+
     m_resetInProgress = true;
+    emit progressChanged(resetInProgress());
+    m_width = width;
+    emit widthChanged(width);
+    m_height = height;
+    emit heightChanged(height);
     for (Cell *cell : m_cells) {
             delete cell;
         }
         m_cells.clear();
 
-    m_width = width;
-    emit widthChanged(width);
-    m_height = height;
-    emit heightChanged(height);
+
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
@@ -33,6 +36,7 @@ void Field::setSize(int width, int height)
         }
     }
     m_resetInProgress = false;
+    emit progressChanged(resetInProgress());
 }
 
 void maybeAddCell(QVector<Cell*> *vector, Cell *cell)

@@ -15,6 +15,7 @@ class Field : public QObject
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
     Q_PROPERTY(int height READ height NOTIFY heightChanged)
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
+    Q_PROPERTY(bool resetInProgress READ resetInProgress NOTIFY progressChanged)
 
 public:
     enum State{
@@ -50,14 +51,14 @@ public:
 
     State state() const {return m_state;}
 
+    bool resetInProgress() const {return m_resetInProgress; }
+
 protected slots:
     void onCellOpened(int x, int y);
 
     void onCellMarkChanged();
 
 public slots:
-
-    bool resetInProgress() const {return m_resetInProgress; }
 
     void startNewGame();
 
@@ -70,6 +71,8 @@ signals:
 
     void widthChanged(int newWidth);
     void heightChanged(int newHeight);
+
+    void progressChanged(bool newProgress);
 
 private:
     QVector<Cell*> m_cells;

@@ -35,7 +35,6 @@ void CellItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     if (m_cell->isOpen()) {
         if (m_cell->haveMine()) {
-            //painter->fillRect(2, 2, cellSize - 4, cellSize - 4, Qt::red);
             if (m_cell->isExploded() == true){
                 painter->fillRect(2, 2, cellSize - 4, cellSize - 4, Qt::red);
             }

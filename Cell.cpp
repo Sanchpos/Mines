@@ -5,8 +5,6 @@
 Cell::Cell(int x, int y):
     QObject()
 {
-    //m_field = field;
-
     m_x = x;
     m_y = y;
 
@@ -27,6 +25,7 @@ int Cell::minesAround() const
         }
     }
     return mines;
+
 }
 
 void Cell::setHaveMine(bool haveMine)
@@ -49,7 +48,7 @@ void Cell::toggleMark()
         break;
     case MarkQuestioned:
         m_mark = MarkNothing;
-        //emit markChanged(m_mark);
+        emit markChanged(m_mark);
         break;
     }
 }
@@ -79,10 +78,8 @@ void Cell::open()
     }
 
     m_open = true;
-    //if(m_field->isGenerated() == false){
-        //m_field->generate(m_x, m_y);
-    //}
     emit opened(x(), y());
+    emit isOpenChanged(isOpen());
     if (minesAround() == 0 && m_haveMine == false){
         for (Cell *cell : getNeighbors()) {
                 cell->open();
@@ -90,7 +87,9 @@ void Cell::open()
     }
     if (haveMine() == true){
         m_exploded = true;
+        emit isExplodedChanged(isExploded());
     }
+    emit minesAroundChanged(minesAround());
 }
 
 
@@ -104,6 +103,13 @@ void Cell::reset()
     m_mark = MarkNothing;
 
     m_exploded = false;
+
+    emit isExplodedChanged(isExploded());
+
+    emit minesAroundChanged(minesAround());
+
+    emit isOpenChanged(isOpen());
+
 }
 
 void Cell::setNeighbors(const QVector<Cell*> &neighbors)
@@ -119,4 +125,8 @@ QVector<Cell *> Cell::getNeighbors() const
 void Cell::reveal()
 {
     m_open = true;
+
+    emit minesAroundChanged(minesAround());
+
+    emit isOpenChanged(isOpen());
 }

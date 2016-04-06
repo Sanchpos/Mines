@@ -69,13 +69,13 @@ signals:
 
     void markChanged(Mark newMark);
 
-    void haveMineChanged(bool haveMine);
+    void haveMineChanged(bool newHaveMine);
 
-    void isOpenChanged(bool isOpen);
+    void isOpenChanged(bool newIsOpen);
 
-    void isExplodedChanged(bool isExploded);
+    void isExplodedChanged(bool newIsExploded);
 
-    void minesAroundChanged(int minesAround);
+    void minesAroundChanged(int newMinesAround);
 
 private:
     //Field *m_field;

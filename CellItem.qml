@@ -13,18 +13,21 @@ Rectangle {
     Rectangle {
         anchors.fill: parent
         anchors.margins: (size * 0.14) < 2 ? 2 : size * 0.04
-        //visible: cell.isOpen & cell.haveMine
-        color: { if (cell.isOpen === true) {
-                    if (cell.haveMine === true) {
-                        if (cell.isExploded() === false ){
-                            "red"
-                        }
-                        else {
-                            "green"
-                        }
-                    }
+        visible: cell.isOpen & cell.haveMine
+        color:{
+            if (cell.isExploded) {
+                   "red"
+                }
+                else {
+                   "green"
                 }
             }
+        Text {
+            text: "+"
+            anchors.centerIn: parent
+            font.pixelSize: size * 0.8
+        }
+    }
 
         Rectangle {
             id: cellrect
@@ -47,13 +50,14 @@ Rectangle {
                 font.pixelSize: size * 0.8
             }
         }
+
         Text {
             text: cell.minesAround
-            visible: cell.isOpen && cell.minesAround !== 0
-            anchors.centerIn: cellrect
+            visible: cell.isOpen && cell.minesAround !== 0 && !cell.haveMine
+            anchors.centerIn: parent
             font.pixelSize: size * 0.8
         }
-    }
+
 
 
     MouseArea {
