@@ -32,11 +32,10 @@ public:
     int x() const { return m_x; }
     int y() const { return m_y; }
 
-    int minesAround() const;
 
     Mark mark() const { return m_mark; }
 
-    void toggleMark();
+    int minesAround() const;
 
 
     bool haveMine() const { return m_haveMine; }
@@ -51,29 +50,32 @@ public:
 
     QVector<Cell*> getNeighbors() const;
 
-    void tryToOpenAround();
-
     void setNeighbors(const QVector<Cell*> &neighbors);
 
     void reveal();
 
-    bool isExploded()const { return m_exploded; }
 
 public slots:
     void open();
+
+    void toggleMark();
+
+    void tryToOpenAround();
+
+    bool isExploded()const { return m_exploded; }
 
 signals:
     void opened(int x, int y);
 
     void markChanged(Mark newMark);
 
-    void haveMineChanged(bool newHaveMine);
+    void haveMineChanged(bool haveMine);
 
-    void isOpenChanged(bool newIsOpen);
+    void isOpenChanged(bool isOpen);
 
-    void isExplodedChanged(bool newIsExploded);
+    void isExplodedChanged(bool isExploded);
 
-    void minesAroundChanged(int newMinesAround);
+    void minesAroundChanged(int minesAround);
 
 private:
     //Field *m_field;

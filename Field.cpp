@@ -12,6 +12,7 @@ Field::Field():
 
 void Field::setSize(int width, int height)
 {
+    m_resetInProgress = true;
     for (Cell *cell : m_cells) {
             delete cell;
         }
@@ -31,6 +32,7 @@ void Field::setSize(int width, int height)
             m_cells.append(cell);
         }
     }
+    m_resetInProgress = false;
 }
 
 void maybeAddCell(QVector<Cell*> *vector, Cell *cell)
@@ -59,6 +61,24 @@ void Field::prepare()
     setState(StateIdle);
 }
 
+void Field::startNewGame()
+{
+    for (int i = 0; i <  m_cells.size(); ++i) {
+            m_cells[i]->reset();
+            QVector<Cell*> neighbors;
+            for (int x = m_cells[i]->x() - 1; x <= m_cells[i]->x() + 1; ++x) {
+                maybeAddCell(&neighbors, cellAt(x, m_cells[i]->y() - 1));
+                maybeAddCell(&neighbors, cellAt(x, m_cells[i]->y() + 1));
+            }
+            maybeAddCell(&neighbors, cellAt(m_cells[i]->x() - 1, m_cells[i]->y()));
+            maybeAddCell(&neighbors, cellAt(m_cells[i]->x() + 1, m_cells[i]->y()));
+
+            m_cells[i]->setNeighbors(neighbors);
+    }
+    m_generated = false;
+    m_numberOfOpenedCells = 0;
+    setState(StateIdle);
+}
 
 void Field::lose()
 {

@@ -55,6 +55,11 @@ protected slots:
 
     void onCellMarkChanged();
 
+public slots:
+
+    bool resetInProgress() const {return m_resetInProgress; }
+
+    void startNewGame();
 
 signals:
     void numberOfMinesChanged();
@@ -78,6 +83,9 @@ private:
     int m_numberOfFlags;
     int m_numberOfOpenedCells;
     State m_state;
+
+    bool m_resetInProgress;
+
 };
 
 #endif // FIELD_HPP

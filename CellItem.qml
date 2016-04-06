@@ -2,8 +2,9 @@ import QtQuick 2.0
 import GameComponents 1.0
 
 Rectangle {
-    width: 64
-    height: 64
+    property int size: 64
+    width: size
+    height: size
     border.color: "black"
     border.width: 2
 
@@ -11,10 +12,10 @@ Rectangle {
 
     Rectangle {
         anchors.fill: parent
-        anchors.margins: 2
+        anchors.margins: (size * 0.14) < 2 ? 2 : size * 0.04
         //visible: cell.isOpen & cell.haveMine
-        color: { if (cell.isOpen) {
-                    if (cell.haveMine) {
+        color: { if (cell.isOpen === true) {
+                    if (cell.haveMine === true) {
                         if (cell.isExploded() === false ){
                             "red"
                         }
@@ -32,10 +33,7 @@ Rectangle {
             anchors.fill: parent
             anchors.margins: 2
             Text {
-                text: text()
-                anchors.centerIn: cellrect
-                font.pixelSize: 50
-                function text(){
+                text: {
                     switch (cell.mark){
                     case 0:
                         return ""
@@ -45,7 +43,15 @@ Rectangle {
                         return "?"
                     }
                 }
+                anchors.centerIn: cellrect
+                font.pixelSize: size * 0.8
             }
+        }
+        Text {
+            text: cell.minesAround
+            visible: cell.isOpen && cell.minesAround !== 0
+            anchors.centerIn: cellrect
+            font.pixelSize: size * 0.8
         }
     }
 
