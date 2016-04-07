@@ -14,14 +14,8 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: (size * 0.14) < 2 ? 2 : size * 0.04
         visible: cell.isOpen & cell.haveMine
-        color:{
-            if (cell.isExploded) {
-                   "red"
-                }
-                else {
-                   "green"
-                }
-            }
+        color: cell.isExploded ? "red" : "green"
+
         Text {
             text: "+"
             anchors.centerIn: parent
@@ -34,7 +28,7 @@ Rectangle {
             color: "#c0c0c0"
             visible:  !cell.isOpen
             anchors.fill: parent
-            anchors.margins: 2
+            anchors.margins: (size * 0.14) < 2 ? 2 : size * 0.04
             Text {
                 text: {
                     switch (cell.mark){

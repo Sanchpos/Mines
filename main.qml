@@ -21,15 +21,7 @@ Rectangle {
                  Text {
                      property string seconds: timer.seconds < 10 ? "0" + timer.seconds : timer.seconds
                      property string minutes: timer.minutes < 10 ? "0" + timer.minutes : timer.minutes
-                     property string time: {
-                         if(field.state === 0) {
-                             "00:00"
-                         }
-                         else {
-                             minutes+":"+seconds
-                         }
-                     }
-
+                     property string time: field.state === Field.StateIdle ? "00:00" : minutes + ":" + seconds
                      text: "Time: " + time
                      anchors.centerIn: parent
                      font.pixelSize: parent.height * 0.6
@@ -39,16 +31,14 @@ Rectangle {
                          property int minutes: 0
                          interval: 1000
                          repeat: true
-                         running: {
-                             if (field.state === 1) {
-                                 minutes = 0;
-                                 seconds = 0;
-                                 return true
-                             }
-                             else {
-                                 return false
-                             }
-                         }
+                         running: field.state === Field.StateStarted
+                         onRunningChanged: {
+                                     if (running) {
+                                         seconds = 0;
+                                         minutes = 0;
+                                     }
+                                 }
+
                          onTriggered: {
                          if (seconds === 59) {
                             minutes += 1;
@@ -80,7 +70,7 @@ Rectangle {
                      Repeater {
                          id: cellRepeater
                          model: {
-                            if (field.resetInProgress === true) {
+                            if (field.resetInProgress) {
                                 return 0
                             }
                             else {
@@ -101,27 +91,13 @@ Rectangle {
                 opacity: 0.7
                 width: parent.width
                 height: parent.height
-                visible: {
-                    if (field.state === 2){
-                        return true
-                    }
-                    else {
-                        return false
-                    }
-                }
+                visible: field.state === Field.StateEnded
             }
                 Text {
                 text: "Game over"
                 anchors.centerIn: parent
                 font.pixelSize: 64
-                visible: {
-                    if (field.state === 2){
-                        return true
-                    }
-                    else {
-                        return false
-                    }
-                }
+                visible: field.state === Field.StateEnded
             }
         }
     }
